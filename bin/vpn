@@ -1,0 +1,25 @@
+#!/bin/bash
+set -euo pipefail
+IFACE=wg0
+KEYFILE=/etc/wireguard/${IFACE}.key.gpg
+
+case "${1:-}" in
+  up)
+    # decrypt into a private-key-only interface config via process substitution
+    key=$(gpg --quiet --decrypt "$KEYFILE")   # prompts for passphrase
+    wg-quick up "$IFACE"
+    # inject the key without it ever touching disk
+    wg set "$IFACE" private-key <(printf '%s' "$key")
+    unset key
+    echo "VPN up."
+    ;;
+  down)
+    wg-quick down "$IFACE"
+    echo "VPN down."
+    ;;
+  status)
+    wg show "$IFACE"
+    ;;
+  *)
+    echo "Usage: vpn {up|down|status}"; exit 1;;
+esac

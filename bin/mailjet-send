@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+CONFIG_FILE="/etc/custom_scripts/mailjet.env"
+
+if [ -f "$CONFIG_FILE" ]; then
+    set -a
+    source "$CONFIG_FILE"
+    set +a
+fi
+
+: "${MAILJET_API_KEY:=""}"
+: "${MAILJET_SECRET_KEY:=""}"
+: "${EMAIL_FROM:=""}"
+: "${EMAIL_TO:=""}"
+
+if [ -z "$MAILJET_API_KEY" ] || [ -z "$MAILJET_SECRET_KEY" ]; then
+    echo "Error: Mailjet credentials not configured" >&2
+    exit 1
+fi
+
+if [ -z "$EMAIL_FROM" ]; then
+    echo "Error: EMAIL_FROM not set" >&2
+    exit 1
+fi
+
+if [ -z "$EMAIL_TO" ]; then
+    echo "Error: EMAIL_TO not set" >&2
+    exit 1
+fi
+
+SUBJECT="${1:-Alert}"
+BODY="${2:-}"
+FROM_NAME="${3:-Server Alert}"
+
+if [ -z "$BODY" ]; then
+    BODY=$(cat)
+fi
+
+HOSTNAME="${HOSTNAME:-$(hostname)}"
+
+JSON_PAYLOAD=$(jq -n \
+    --arg from "$EMAIL_FROM" \
+    --arg from_name "$FROM_NAME" \
+    --arg to "$EMAIL_TO" \
+    --arg subject "$SUBJECT" \
+    --arg body "$BODY" \
+    '{
+        Messages: [
+            {
+                From: {Email: $from, Name: $from_name},
+                To: [{Email: $to}],
+                Subject: $subject,
+                TextPart: $body
+            }
+        ]
+    }')
+
+curl -s -X POST "https://api.mailjet.com/v3.1/send" \
+    -u "${MAILJET_API_KEY}:${MAILJET_SECRET_KEY}" \
+    -H "Content-Type: application/json" \
+    -d "$JSON_PAYLOAD"

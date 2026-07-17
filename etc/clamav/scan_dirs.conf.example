@@ -1,0 +1,5 @@
+# Directories scanned by clamav_scan.sh
+# One directory per line. Blank lines and # comments are ignored.
+/home
+/var/www
+/var/lib/deluge

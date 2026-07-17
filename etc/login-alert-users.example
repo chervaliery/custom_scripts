@@ -1,0 +1,4 @@
+# Users monitored by login-alert.sh
+# One username per line. Blank lines and # comments are ignored.
+# An email is sent whenever one of these users opens a session.
+root
