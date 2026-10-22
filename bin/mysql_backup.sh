@@ -31,6 +31,10 @@ for db in $(echo 'show databases;' | mysql -s -u ${DB_USER} -p${DB_PASS} | egrep
         echo "Done."
 done
 
+# SQLite Backup
+
+gzip /var/www/chhoto-url/data/urls.sqlite -c > ${DST}/${DATE}/chhoto-url.sqlite.gz
+
 chown -R root:deluge $DST
 chmod -R 770 $DST
 
