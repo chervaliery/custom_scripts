@@ -13,6 +13,7 @@ sudo ln -s /opt/custom_scripts/bin/clamav_scan.sh /usr/local/bin/clamav_scan.sh
 sudo ln -s /opt/custom_scripts/bin/mysql_backup.sh /usr/local/bin/mysql_backup.sh
 sudo ln -s /opt/custom_scripts/bin/update-cyberchef.sh /usr/local/bin/update-cyberchef.sh
 sudo ln -s /opt/custom_scripts/bin/vpn /usr/local/bin/vpn
+sudo ln -s /opt/custom_scripts/bin/install-crafts.sh /usr/local/bin/install-crafts.sh
 ```
 
 ## Scripts
@@ -25,6 +26,7 @@ sudo ln -s /opt/custom_scripts/bin/vpn /usr/local/bin/vpn
 | [`mysql_backup.sh`](bin/mysql_backup.sh)         | MySQL database backup utility         |
 | [`update-cyberchef.sh`](bin/update-cyberchef.sh) | Auto-update CyberChef web interface   |
 | [`vpn`](bin/vpn)                                 | WireGuard VPN management              |
+| [`install-crafts.sh`](bin/install-crafts.sh)     | Setup and update crafts script        |
 
 ## Configuration
 
